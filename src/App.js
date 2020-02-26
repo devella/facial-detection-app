@@ -28,24 +28,38 @@ const particlesOptions = {
 
 export class App extends Component {
   constructor() {
-    super()
+    super();
     this.state = {
       input: '',
       imageUrl: '',
       box: [],
       route: 'signin',
-      hasSignIn: false
+      hasSignIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: '' 
+      }
     }
   }
+  updateUser = (info) => {
+    this.setState({user: {
+      id: info.id,
+      name: info.name,
+      email: info.email,
+      entries: info.entries,
+      joined: info.joined 
 
-
+    }})
+  }
 
  determineFaceLocation = (data) => {
  const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
  const image = document.getElementById('inputimage');
  const width = Number(image.width);
  const height = Number(image.height);
-
  return {
   leftCol: clarifaiFace.left_col * width,
   topRow: clarifaiFace.top_row * height,
@@ -65,7 +79,24 @@ export class App extends Component {
     this.setState({imageUrl: this.state.input})
     app.models.predict(Clarifai.FACE_DETECT_MODEL,
      this.state.input)
-     .then(response => this.displayFaceBox(this.determineFaceLocation(response)) )
+     .then(response => {
+       if (response) {
+         fetch('http://localhost:3000/image', {
+          method: 'put',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            id: this.state.user.id
+          })
+         })
+         .then(response => response.json())
+         .then(count => {
+          this.setState(Object.assign(this.state.user, { entries: count}))
+
+           })
+
+       }
+       this.displayFaceBox(this.determineFaceLocation(response)) 
+        })
       .catch(err => console.log(err));
   
   }
@@ -91,7 +122,7 @@ export class App extends Component {
       { this.state.route === 'home' ?
       <div>
        <Logo/>
-       <Rank/>
+       <Rank name={this.state.user.name} entries={this.state.user.entries}/>
       <ImageLinkForm 
       onInputChange={this.onInputChange} 
       onButtonSubmit={this.onButtonSubmit}
@@ -100,8 +131,8 @@ export class App extends Component {
       </div>
       : (
         route === 'signin'
-        ? <Signin onRouteChange={this.onRouteChange}/>
-        :<Register onRouteChange={this.onRouteChange}/>
+        ? <Signin updateUser={this.updateUser} onRouteChange={this.onRouteChange}/>
+        :<Register updateUser={this.updateUser} onRouteChange={this.onRouteChange}/>
       )
 
       }
