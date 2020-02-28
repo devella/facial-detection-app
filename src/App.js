@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Clarifai from 'clarifai';
 import Navigation from './components/Navigation/Navigation';
 import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
@@ -10,10 +9,7 @@ import Rank from './components/Rank/Rank';
 import Particles from 'react-particles-js';
 import './App.css';
 
-// API key here from Clarifai.
-const app = new Clarifai.App({
-  apiKey: 'a4547bc895db42f0874614febda0adb0'
- });
+
 const particlesOptions = {
   particles: {
     number: {
@@ -25,24 +21,28 @@ const particlesOptions = {
     }
   }
 }
+ 
+const firstStage = {
+  
+    input: '',
+    imageUrl: '',
+    box: [],
+    route: 'signin',
+    hasSignIn: false,
+    user: {
+      id: '',
+      name: '',
+      email: '',
+      entries: 0,
+      joined: '' 
+    }
+  }
+
 
 export class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: [],
-      route: 'signin',
-      hasSignIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: '' 
-      }
-    }
+    this.state = firstStage;
   }
   updateUser = (info) => {
     this.setState({user: {
@@ -77,8 +77,15 @@ export class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input})
-    app.models.predict(Clarifai.FACE_DETECT_MODEL,
-     this.state.input)
+    fetch('http://localhost:3000/imageurl', {
+          method: 'post',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            input: this.state.input
+          })
+         })
+         .then(response => response.json())
+    
      .then(response => {
        if (response) {
          fetch('http://localhost:3000/image', {
@@ -91,18 +98,16 @@ export class App extends Component {
          .then(response => response.json())
          .then(count => {
           this.setState(Object.assign(this.state.user, { entries: count}))
-
            })
-
+           .catch(console.log)
        }
        this.displayFaceBox(this.determineFaceLocation(response)) 
         })
       .catch(err => console.log(err));
-  
   }
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({hasSignIn: false})
+      this.setState(firstStage)
     } else if (route === 'home') {
       this.setState({hasSignIn: true})
     }
