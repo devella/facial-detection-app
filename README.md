@@ -1,17 +1,26 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-To view a live example, **[click here](https://face-detection-game.herokuapp.com/)**
+## To view a live example, **[click here](https://face-detection-game.herokuapp.com/)**
 
-Front-End
+## Front-End
 
-HTML5, CSS3, React.js
+- On HTML5, 
+- On CSS3, 
+- On React.js
 
-NPM Packages
+## NPM Packages
 
-Create-React-App, Tachyons, react-tilt, particles.js, Bcrypt, 
-Postgresql, knex, body parser, cors express.
+- On Create-React-App, 
+- On Tachyons, 
+- On react-tilt,
+- On particles.js, 
+- On Bcrypt, 
+- On Postgresql, 
+- On knex, 
+- On body parser, 
+- On cors express.
 
-APIs
+## APIs
 
-Clarifai
-Smart Brain API
+- On Clarifai
+- On Smart Brain API
