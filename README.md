@@ -4,23 +4,23 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Front-End
 
-- On HTML5, 
-- On CSS3, 
-- On React.js
+- HTML5, 
+- CSS3, 
+- React.js
 
 ## NPM Packages
 
-- On Create-React-App, 
-- On Tachyons, 
-- On react-tilt,
-- On particles.js, 
-- On Bcrypt, 
-- On Postgresql, 
-- On knex, 
-- On body parser, 
-- On cors express.
+- Create-React-App, 
+- Tachyons, 
+- react-tilt,
+- particles.js, 
+- Bcrypt, 
+- Postgresql, 
+- knex, 
+- body parser, 
+- cors express.
 
 ## APIs
 
-- On Clarifai
-- On Smart Brain API
+- Clarifai
+- Smart Brain API
